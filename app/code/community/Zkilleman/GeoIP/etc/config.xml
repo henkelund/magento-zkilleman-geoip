@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Zkilleman_GeoIP
+ *
+ * Copyright (C) 2012 Henrik Hedelund (henke.hedelund@gmail.com)
+ *
+ * This file is part of Zkilleman_GeoIP.
+ *
+ * Zkilleman_GeoIP is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zkilleman_GeoIP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Zkilleman_GeoIP. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @category  Zkilleman
+ * @package   Zkilleman_GeoIP
+ * @author    Henrik Hedelund <henke.hedelund@gmail.com>
+ * @copyright 2012 Henrik Hedelund (henke.hedelund@gmail.com)
+ * @license   http://www.gnu.org/licenses/lgpl.html GNU LGPL
+ * @link      https://github.com/henkelund/magento-zkilleman-geoip
+ */
+-->
+<config>
+    <modules>
+        <Zkilleman_GeoIP>
+            <version>0.1.0.0</version>
+        </Zkilleman_GeoIP>
+    </modules>
+    <global>
+        <models>
+            <geoip>
+                <class>Zkilleman_GeoIP_Model</class>
+                <resourceModel>geoip_resource</resourceModel>
+            </geoip>
+            <geoip_resource>
+                <class>Zkilleman_GeoIP_Model_Resource</class>
+                <entities>
+                    <country>
+                        <table>geoip_country</table>
+                    </country>
+                    <country_tmp>
+                        <table>geoip_country_tmp</table>
+                    </country_tmp>
+                </entities>
+            </geoip_resource>
+        </models>
+        <resources>
+            <geoip_setup>
+                <setup>
+                    <module>Zkilleman_GeoIP</module>
+                </setup>
+            </geoip_setup>
+        </resources>
+        <index>
+            <indexer>
+                <geoip_country>
+                    <model>geoip/indexer_country</model>
+                </geoip_country>
+            </indexer>
+        </index>
+        <helpers>
+            <geoip>
+                <class>Zkilleman_GeoIP_Helper</class>
+            </geoip>
+        </helpers>
+        <geoip>
+            <country>
+                <sources>
+                    <maxmind>
+                        <label>MaxMind GeoLite</label>
+                        <resourceModel>geoip/indexer_country_maxmind</resourceModel>
+                    </maxmind>
+                </sources>
+            </country>
+            <maxmind>
+                <country>
+                    <zip_url><![CDATA[http://geolite.maxmind.com/download/geoip/database/GeoIPCountryCSV.zip]]></zip_url>
+                </country>
+            </maxmind>
+        </geoip>
+    </global>
+    <default>
+        <geoip>
+            <general>
+                <country_source>maxmind</country_source>
+            </general>
+        </geoip>
+    </default>
+</config>

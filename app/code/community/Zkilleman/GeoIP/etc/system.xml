@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Zkilleman_GeoIP
+ *
+ * Copyright (C) 2012 Henrik Hedelund (henke.hedelund@gmail.com)
+ *
+ * This file is part of Zkilleman_GeoIP.
+ *
+ * Zkilleman_GeoIP is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zkilleman_GeoIP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Zkilleman_GeoIP. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @category  Zkilleman
+ * @package   Zkilleman_GeoIP
+ * @author    Henrik Hedelund <henke.hedelund@gmail.com>
+ * @copyright 2012 Henrik Hedelund (henke.hedelund@gmail.com)
+ * @license   http://www.gnu.org/licenses/lgpl.html GNU LGPL
+ * @link      https://github.com/henkelund/magento-zkilleman-geoip
+ */
+-->
+<config>
+    <sections>
+        <geoip translate="label" module="geoip">
+            <label>Zkilleman GeoIP</label>
+            <tab>general</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>999999</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label">
+                    <label>General Options</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <country_source translate="label comment">
+                            <label>Country Ranges Data Source</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>geoip/config_source_country_sources</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[Service used to popuplate country ip ranges database]]></comment>
+                        </country_source>
+                    </fields>
+                </general>
+            </groups>
+        </geoip>
+    </sections>
+</config>
