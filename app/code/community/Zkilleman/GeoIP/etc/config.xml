@@ -31,7 +31,7 @@
 <config>
     <modules>
         <Zkilleman_GeoIP>
-            <version>0.1.0.0</version>
+            <version>0.2.0.0</version>
         </Zkilleman_GeoIP>
     </modules>
     <global>
@@ -49,6 +49,12 @@
                     <country_tmp>
                         <table>geoip_country_tmp</table>
                     </country_tmp>
+                    <country_ipv6>
+                        <table>geoip_country_ipv6</table>
+                    </country_ipv6>
+                    <country_ipv6_tmp>
+                        <table>geoip_country_ipv6_tmp</table>
+                    </country_ipv6_tmp>
                 </entities>
             </geoip_resource>
         </models>
@@ -64,6 +70,9 @@
                 <geoip_country>
                     <model>geoip/indexer_country</model>
                 </geoip_country>
+                <geoip_country_ipv6>
+                    <model>geoip/indexer_ipv6_country</model>
+                </geoip_country_ipv6>
             </indexer>
         </index>
         <helpers>
@@ -80,10 +89,21 @@
                     </maxmind>
                 </sources>
             </country>
+            <country_ipv6>
+                <sources>
+                    <maxmind>
+                        <label>MaxMind GeoLite IPv6</label>
+                        <resourceModel>geoip/indexer_country_ipv6_maxmind</resourceModel>
+                    </maxmind>
+                </sources>
+            </country_ipv6>
             <maxmind>
                 <country>
                     <zip_url><![CDATA[http://geolite.maxmind.com/download/geoip/database/GeoIPCountryCSV.zip]]></zip_url>
                 </country>
+                <country_ipv6>
+                    <gzip_url><![CDATA[http://geolite.maxmind.com/download/geoip/database/GeoIPv6.csv.gz]]></gzip_url>
+                </country_ipv6>
             </maxmind>
         </geoip>
     </global>
@@ -91,6 +111,7 @@
         <geoip>
             <general>
                 <country_source>maxmind</country_source>
+                <country_ipv6_source>maxmind</country_ipv6_source>
             </general>
         </geoip>
     </default>

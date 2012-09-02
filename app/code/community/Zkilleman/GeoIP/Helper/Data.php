@@ -62,21 +62,74 @@ class Zkilleman_GeoIP_Helper_Data extends Mage_Core_Helper_Abstract
 
     /**
      *
+     * @param  string $ipv6
+     * @return string
+     */
+    public function ipv6ToInt($ipv6)
+    {
+        if (!@class_exists('Math_BigInteger')) {
+            require_once(implode(DS,
+                            array('lib', 'phpseclib', 'Math', 'BigInteger.php')));
+        }
+
+        $segs = explode(':', $ipv6);
+        $hex  = '';
+        for ($i = 0; $i < 8; ++$i) {
+            $hex .= str_pad(isset($segs[$i]) ? $segs[$i] : '', 4, '0', STR_PAD_LEFT);
+        }
+
+        $bigint = new Math_BigInteger($hex, 16);
+        return $bigint->toString();
+    }
+
+    /**
+     *
+     * @param  string $int
+     * @return string
+     */
+    public function intToIpv6($int)
+    {
+        if (!@class_exists('Math_BigInteger')) {
+            require_once(implode(DS,
+                            array('lib', 'phpseclib', 'Math', 'BigInteger.php')));
+        }
+
+        $bigint = new Math_BigInteger($int);
+        $hex    = str_pad($bigint->toHex(), 32, '0', STR_PAD_LEFT);
+        $segs   = str_split($hex, 4);
+        for ($i = 0; $i < 8; ++$i) {
+            $segs[$i] = ltrim($segs[$i], '0');
+        }
+        return preg_replace('/\:{3,}$/', '::', implode(':', $segs));
+    }
+
+    /**
+     *
      * @param  string $ip
      * @return Zkilleman_GeoIP_Model_Country
      */
     public function getCountry($ip)
     {
-        if (!is_scalar($ip)) {
-            return null;
-        } else if (!is_numeric($ip)) {
+        $resourceModel = 'geoip/country_collection';
+        if (false !== strpos($ip, '.')) {
             $ip = $this->ipToInt($ip);
+        } else if (false !== strpos($ip, ':')) {
+            $ip = $this->ipv6ToInt($ip);
+            $resourceModel = 'geoip/country_ipv6_collection';
         }
-        $ranges = Mage::getResourceModel('geoip/country_collection');
-        /* @var $ranges Zkilleman_GeoIP_Model_Resource_Country_Collection */
-        $ranges->addFieldToFilter('start_ip_int', array('lteq' => $ip))
-                    ->addFieldToFilter('end_ip_int', array('gteq' => $ip))
-                        ->setPageSize(1);
+
+        // Can't do it like this cause MySQL string to decimal cast loses precision
+        // $ranges = Mage::getResourceModel($resourceModel)
+        //                ->addFieldToFilter('start_ip_int', array('lteq' => $ip))
+        //                    ->addFieldToFilter('end_ip_int', array('gteq' => $ip))
+        //                        ->setPageSize(1);
+
+        if (!preg_match('/^\d+$/', $ip)) {
+            return false;
+        }
+        $ranges = Mage::getResourceModel($resourceModel)->setPageSize(1);
+        $ranges->getSelect()->where(
+                    sprintf('start_ip_int <= %s AND end_ip_int >= %s', $ip, $ip));
 
         return $ranges->getSize() > 0 ? $ranges->getFirstItem() : null;
     }

@@ -84,7 +84,7 @@ class Zkilleman_GeoIP_Helper_Import extends Mage_Core_Helper_Abstract
         if (is_resource($remoteResource)) {
             $localResource = fopen($file, 'wb');
             if (is_resource($localResource)) {
-                while(!feof($remoteResource)) {
+                while (!feof($remoteResource)) {
                     fwrite(
                             $localResource,
                             fread(
@@ -131,5 +131,33 @@ class Zkilleman_GeoIP_Helper_Import extends Mage_Core_Helper_Abstract
             zip_close($zip);
         }
         return $files;
+    }
+
+    /**
+     *
+     * @param  string $file
+     * @return mixed string|false
+     */
+    public function gunzip($file)
+    {
+        if (!extension_loaded('zlib')) {
+            return false;
+        }
+        $name = $this->getNewFilename(basename($file, '.gz'));
+        $gz = gzopen($file, 'rb');
+        if (is_resource($gz)) {
+            $out = fopen($name, 'wb');
+            if (is_resource($out)) {
+                while ($data = gzread($gz, self::IO_CHUNK_SIZE)) {
+                    fwrite($out, $data);
+                }
+                fclose($out);
+            } else {
+                return false;
+            }
+            return $name;
+            gzclose($gz);
+        }
+        return false;
     }
 }

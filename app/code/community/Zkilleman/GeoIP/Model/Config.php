@@ -30,8 +30,10 @@
 class Zkilleman_GeoIP_Model_Config
 {
 
-    const XML_PATH_COUNTRY_SOURCES = 'global/geoip/country/sources';
-    const XML_PATH_COUNTRY_SOURCE  = 'geoip/general/country_source';
+    const XML_PATH_COUNTRY_SOURCES      = 'global/geoip/country/sources';
+    const XML_PATH_COUNTRY_SOURCE       = 'geoip/general/country_source';
+    const XML_PATH_COUNTRY_IPV6_SOURCES = 'global/geoip/country_ipv6/sources';
+    const XML_PATH_COUNTRY_IPV6_SOURCE  = 'geoip/general/country_ipv6_source';
 
     /**
      *
@@ -41,38 +43,56 @@ class Zkilleman_GeoIP_Model_Config
 
     /**
      *
+     * @var array
+     */
+    protected $_countryIpv6Sources = null;
+
+    /**
+     *
+     * @param  string $path
+     * @return array
+     */
+    protected function _getCountrySources($path)
+    {
+        $sources = array();
+        $node = Mage::getConfig()->getNode($path);
+        /* @var $node Mage_Core_Model_Config_Element */
+        foreach ($node->children() as $sourceConfig) {
+            /* @var $sourceConfig Mage_Core_Model_Config_Element */
+            $modelClass = Mage::getConfig()
+                        ->getResourceModelClassName(
+                                (string) $sourceConfig->resourceModel);
+
+            if (@is_subclass_of(
+                    $modelClass,
+                    'Zkilleman_GeoIP_Model_Resource_Indexer_Country_Abstract')) {
+
+                $module = $sourceConfig->getAttribute('module');
+                $helper = Mage::helper($module ? $module : 'geoip');
+                $label  = isset($sourceConfig->label) ?
+                                $helper->__((string) $sourceConfig->label) :
+                                    $sourceConfig->getName();
+
+                $sources[$sourceConfig->getName()] =
+                        new Varien_Object(array(
+                            'code'           => $sourceConfig->getName(),
+                            'label'          => $label,
+                            'resource_model' =>
+                                    (string) $sourceConfig->resourceModel));
+            }
+        }
+        return $sources;
+    }
+
+    /**
+     *
      * @return array
      */
     public function getCountrySources()
     {
         if ($this->_countrySources == null) {
-            $this->_countrySources = array();
-            $node = Mage::getConfig()->getNode(self::XML_PATH_COUNTRY_SOURCES);
-            /* @var $node Mage_Core_Model_Config_Element */
-            foreach ($node->children() as $sourceConfig) {
-                /* @var $sourceConfig Mage_Core_Model_Config_Element */
-                $modelClass = Mage::getConfig()
-                            ->getResourceModelClassName(
-                                    (string) $sourceConfig->resourceModel);
-
-                if (@is_subclass_of(
-                        $modelClass,
-                        'Zkilleman_GeoIP_Model_Resource_Indexer_Country_Abstract')) {
-
-                    $module = $sourceConfig->getAttribute('module');
-                    $helper = Mage::helper($module ? $module : 'geoip');
-                    $label  = isset($sourceConfig->label) ?
-                                    $helper->__((string) $sourceConfig->label) :
-                                        $sourceConfig->getName();
-
-                    $this->_countrySources[$sourceConfig->getName()] =
-                            new Varien_Object(array(
-                                'code'           => $sourceConfig->getName(),
-                                'label'          => $label,
-                                'resource_model' =>
-                                        (string) $sourceConfig->resourceModel));
-                }
-            }
+            $this->_countrySources =
+                        $this->_getCountrySources(self::XML_PATH_COUNTRY_SOURCES);
         }
         return $this->_countrySources;
     }
@@ -85,6 +105,30 @@ class Zkilleman_GeoIP_Model_Config
     {
         $code = Mage::getStoreConfig(self::XML_PATH_COUNTRY_SOURCE);
         $sources = $this->getCountrySources();
+        return isset($sources[$code]) ? $sources[$code] : null;
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getCountryIpv6Sources()
+    {
+        if ($this->_countryIpv6Sources == null) {
+            $this->_countryIpv6Sources =
+                    $this->_getCountrySources(self::XML_PATH_COUNTRY_IPV6_SOURCES);
+        }
+        return $this->_countryIpv6Sources;
+    }
+
+    /**
+     *
+     * @return Varien_Object
+     */
+    public function getCountryIpv6Source()
+    {
+        $code = Mage::getStoreConfig(self::XML_PATH_COUNTRY_IPV6_SOURCE);
+        $sources = $this->getCountryIpv6Sources();
         return isset($sources[$code]) ? $sources[$code] : null;
     }
 }
