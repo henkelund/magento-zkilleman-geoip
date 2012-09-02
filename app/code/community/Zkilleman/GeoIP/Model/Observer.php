@@ -32,6 +32,15 @@ class Zkilleman_GeoIP_Model_Observer
 
     /**
      *
+     * @return Zkilleman_GeoIP_Model_Config
+     */
+    protected function _getConfig()
+    {
+        return Mage::getSingleton('geoip/config');
+    }
+
+    /**
+     *
      * @param Varien_Event_Observer $observer
      */
     public function predispatch($observer)
@@ -43,6 +52,40 @@ class Zkilleman_GeoIP_Model_Observer
 
             $countryCode = Mage::helper('geoip')->getClientCountryCode();
             $session->setGeoipCountryCode($countryCode);
+        }
+
+        Mage::register('client_country_id', $session->getGeoipCountryCode(), true);
+    }
+
+    /**
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function checkoutPrerender($observer)
+    {
+        if (!$this->_getConfig()->isSetAddressesCountryEnabled()) {
+            return;
+        }
+
+        $countryId = Mage::registry('client_country_id');
+        if (!$countryId) {
+            return;
+        }
+
+        $layout = Mage::getSingleton('core/layout');
+        /* @var $layout Mage_Core_Model_Layout */
+        foreach (array(
+                    'checkout.onepage.billing',
+                    'checkout.onepage.shipping') as $name) {
+
+            $block   = $layout ? $layout->getBlock($name) : null;
+            $address = $block ? $block->getAddress() : null;
+            if (is_object($address) &&
+                    $address instanceof Varien_Object &&
+                    !$address->hasCountryId()) {
+
+                $address->setCountryId($countryId);
+            }
         }
     }
 }

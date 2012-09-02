@@ -31,7 +31,7 @@
 <config>
     <modules>
         <Zkilleman_GeoIP>
-            <version>0.2.1.0</version>
+            <version>0.2.2.0</version>
         </Zkilleman_GeoIP>
     </modules>
     <global>
@@ -89,6 +89,14 @@
                     </geoip_before_controller>
                 </observers>
             </controller_action_predispatch>
+            <controller_action_layout_render_before_checkout_onepage_index>
+                <observers>
+                    <geoip_before_checkout_render>
+                        <class>geoip/observer</class>
+                        <method>checkoutPrerender</method>
+                    </geoip_before_checkout_render>
+                </observers>
+            </controller_action_layout_render_before_checkout_onepage_index>
         </events>
         <geoip>
             <country>
@@ -120,9 +128,12 @@
     <default>
         <geoip>
             <general>
+                <set_addresses_country>1</set_addresses_country>
+            </general>
+            <import>
                 <country_source>maxmind</country_source>
                 <country_ipv6_source>maxmind</country_ipv6_source>
-            </general>
+            </import>
         </geoip>
     </default>
 </config>

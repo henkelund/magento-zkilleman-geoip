@@ -30,10 +30,11 @@
 class Zkilleman_GeoIP_Model_Config
 {
 
-    const XML_PATH_COUNTRY_SOURCES      = 'global/geoip/country/sources';
-    const XML_PATH_COUNTRY_SOURCE       = 'geoip/general/country_source';
-    const XML_PATH_COUNTRY_IPV6_SOURCES = 'global/geoip/country_ipv6/sources';
-    const XML_PATH_COUNTRY_IPV6_SOURCE  = 'geoip/general/country_ipv6_source';
+    const XML_PATH_SET_ADDRESSES_COUNTRY = 'geoip/general/set_addresses_country';
+    const XML_PATH_COUNTRY_SOURCES       = 'global/geoip/country/sources';
+    const XML_PATH_COUNTRY_SOURCE        = 'geoip/import/country_source';
+    const XML_PATH_COUNTRY_IPV6_SOURCES  = 'global/geoip/country_ipv6/sources';
+    const XML_PATH_COUNTRY_IPV6_SOURCE   = 'geoip/import/country_ipv6_source';
 
     /**
      *
@@ -130,5 +131,14 @@ class Zkilleman_GeoIP_Model_Config
         $code = Mage::getStoreConfig(self::XML_PATH_COUNTRY_IPV6_SOURCE);
         $sources = $this->getCountryIpv6Sources();
         return isset($sources[$code]) ? $sources[$code] : null;
+    }
+
+    /**
+     *
+     * @return bool
+     */
+    public function isSetAddressesCountryEnabled()
+    {
+        return Mage::getStoreConfigFlag(self::XML_PATH_SET_ADDRESSES_COUNTRY);
     }
 }
