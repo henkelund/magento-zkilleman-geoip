@@ -31,7 +31,7 @@
 <config>
     <modules>
         <Zkilleman_GeoIP>
-            <version>0.2.0.0</version>
+            <version>0.2.1.0</version>
         </Zkilleman_GeoIP>
     </modules>
     <global>
@@ -80,6 +80,16 @@
                 <class>Zkilleman_GeoIP_Helper</class>
             </geoip>
         </helpers>
+        <events>
+            <controller_action_predispatch>
+                <observers>
+                    <geoip_before_controller>
+                        <class>geoip/observer</class>
+                        <method>predispatch</method>
+                    </geoip_before_controller>
+                </observers>
+            </controller_action_predispatch>
+        </events>
         <geoip>
             <country>
                 <sources>

@@ -106,7 +106,7 @@ class Zkilleman_GeoIP_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      *
      * @param  string $ip
-     * @return Zkilleman_GeoIP_Model_Country
+     * @return Zkilleman_GeoIP_Model_Country|Zkilleman_GeoIP_Model_Country_Ipv6
      */
     public function getCountry($ip)
     {
@@ -136,10 +136,38 @@ class Zkilleman_GeoIP_Helper_Data extends Mage_Core_Helper_Abstract
 
     /**
      *
-     * @return Zkilleman_GeoIP_Model_Country
+     * @return Zkilleman_GeoIP_Model_Country|Zkilleman_GeoIP_Model_Country_Ipv6
      */
     public function getClientCountry()
     {
         return $this->getCountry(Mage::app()->getRequest()->getClientIp());
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getClientCountryCode()
+    {
+        $countryCode = 'XX';
+
+        if ($range = $this->getClientCountry()) {
+            $countryCode = $range->getCountryCode();
+        } else {
+            // IP lookup missed, fall back on http headers & store default
+            $browser = array_keys(
+                            Mage::app()->getLocale()->getLocale()->getBrowser());
+            $browser[] = Mage::app()->getLocale()->getDefaultLocale();
+
+            foreach ($browser as $locale) {
+                $matches = array();
+                if (preg_match('/^[a-z]{2}_([A-Z]{2})$/', $locale, $matches)) {
+                    $countryCode = $matches[1];
+                    break;
+                }
+            }
+        }
+
+        return $countryCode;
     }
 }
