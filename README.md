@@ -32,4 +32,6 @@ if ($countryRange) {
 ```php
 // Get stored country code for current client
 echo Mage::getSingleton('customer/session')->getGeoipCountryCode();
+// ..or simply
+echo Mage::registry('client_country_id');
 ```
