@@ -31,7 +31,7 @@
 <config>
     <modules>
         <Zkilleman_GeoIP>
-            <version>0.2.2.0</version>
+            <version>0.2.2.1</version>
         </Zkilleman_GeoIP>
     </modules>
     <global>

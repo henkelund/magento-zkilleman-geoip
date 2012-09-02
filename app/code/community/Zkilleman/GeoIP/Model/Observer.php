@@ -68,7 +68,7 @@ class Zkilleman_GeoIP_Model_Observer
         }
 
         $countryId = Mage::registry('client_country_id');
-        if (!$countryId) {
+        if (!$countryId || !$this->_getConfig()->isCountryAllowed($countryId)) {
             return;
         }
 

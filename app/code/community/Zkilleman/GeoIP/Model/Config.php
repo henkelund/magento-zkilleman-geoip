@@ -141,4 +141,18 @@ class Zkilleman_GeoIP_Model_Config
     {
         return Mage::getStoreConfigFlag(self::XML_PATH_SET_ADDRESSES_COUNTRY);
     }
+
+    /**
+     *
+     * @return bool
+     */
+    public function isCountryAllowed($countryCode, $store = null)
+    {
+        $allowed = preg_split(
+                    '/\s*,\s*/',
+                    (string) Mage::getStoreConfig('general/country/allow', $store),
+                    -1,
+                    PREG_SPLIT_NO_EMPTY);
+        return in_array(strtoupper($countryCode), $allowed);
+    }
 }
