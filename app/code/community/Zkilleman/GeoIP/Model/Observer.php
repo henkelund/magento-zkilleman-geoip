@@ -41,6 +41,39 @@ class Zkilleman_GeoIP_Model_Observer
 
     /**
      *
+     * @param Mage_Core_Controller_Varien_Action $action
+     * @param string                             $countryCode
+     */
+    protected function _tryRedirect($action, $countryCode)
+    {
+        $config = $this->_getConfig();
+        if (!$config->isStoreRedirectEnabled()) {
+            return;
+        }
+
+        $helper  = Mage::helper('core');
+        $current = Mage::app()->getStore();
+        if ($helper->getDefaultCountry($current) == $countryCode) {
+            return;
+        }
+
+        $stores = Mage::app()->getWebsite()->getStores();
+        foreach ($stores as $store) {
+            /* @var $store Mage_Core_Model_Store */
+            if ($store->getId() == $current->getId()) {
+                continue;
+            } else if ($helper->getDefaultCountry($store) == $countryCode &&
+                                $config->isCountryAllowed($countryCode, $store)) {
+
+                $action->getResponse()->setRedirect($store->getCurrentUrl(false));
+                $action->getRequest()->setDispatched();
+                return;
+            }
+        }
+    }
+
+    /**
+     *
      * @param Varien_Event_Observer $observer
      */
     public function predispatch($observer)
@@ -52,6 +85,8 @@ class Zkilleman_GeoIP_Model_Observer
 
             $countryCode = Mage::helper('geoip')->getClientCountryCode();
             $session->setGeoipCountryCode($countryCode);
+
+            $this->_tryRedirect($observer->getControllerAction(), $countryCode);
         }
 
         Mage::register('client_country_id', $session->getGeoipCountryCode(), true);
