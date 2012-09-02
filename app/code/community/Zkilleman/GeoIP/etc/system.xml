@@ -67,6 +67,17 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Redirect to store view with matching default country]]></comment>
                         </store_redirect>
+                        <redirect_allowed_websites translate="label comment">
+                            <label>Allowed Redirect Websites</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <frontend_model>geoip/adminhtml_form_field_websites</frontend_model>
+                            <depends><store_redirect>1</store_redirect></depends>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Stay within these websites when redirecting]]></comment>
+                        </redirect_allowed_websites>
                     </fields>
                 </general>
                 <import translate="label">

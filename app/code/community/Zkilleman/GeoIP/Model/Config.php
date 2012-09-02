@@ -32,6 +32,7 @@ class Zkilleman_GeoIP_Model_Config
 
     const XML_PATH_SET_ADDRESSES_COUNTRY = 'geoip/general/set_addresses_country';
     const XML_PATH_STORE_REDIRECT        = 'geoip/general/store_redirect';
+    const XML_PATH_REDIRECT_WEBSITES     = 'geoip/general/redirect_allowed_websites';
     const XML_PATH_COUNTRY_SOURCES       = 'global/geoip/country/sources';
     const XML_PATH_COUNTRY_SOURCE        = 'geoip/import/country_source';
     const XML_PATH_COUNTRY_IPV6_SOURCES  = 'global/geoip/country_ipv6/sources';
@@ -154,15 +155,37 @@ class Zkilleman_GeoIP_Model_Config
 
     /**
      *
+     * @return array
+     */
+    public function getRedirectWebsiteIds($store = null)
+    {
+        $ids = $this->_explode(
+                    Mage::getStoreConfig(self::XML_PATH_REDIRECT_WEBSITES, $store));
+        $current = Mage::app()->getWebsite()->getId();
+        if (!in_array($current, $ids)) {
+            // Current website should always be allowed, right?
+            $ids[] = $current;
+        }
+        return $ids;
+    }
+
+    /**
+     *
      * @return bool
      */
     public function isCountryAllowed($countryCode, $store = null)
     {
-        $allowed = preg_split(
-                    '/\s*,\s*/',
-                    (string) Mage::getStoreConfig('general/country/allow', $store),
-                    -1,
-                    PREG_SPLIT_NO_EMPTY);
+        $allowed = $this->_explode(
+                        Mage::getStoreConfig('general/country/allow', $store));
         return in_array(strtoupper($countryCode), $allowed);
+    }
+
+    /**
+     *
+     * @return array
+     */
+    protected function _explode($string)
+    {
+        return preg_split('/\s*,\s*/', (string) $string, -1, PREG_SPLIT_NO_EMPTY);
     }
 }

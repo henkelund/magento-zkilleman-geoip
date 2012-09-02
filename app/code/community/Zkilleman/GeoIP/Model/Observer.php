@@ -57,10 +57,14 @@ class Zkilleman_GeoIP_Model_Observer
             return;
         }
 
-        $stores = Mage::app()->getWebsite()->getStores();
+        $stores = Mage::app()->getStores();
+        if (isset($stores[$current->getId()])) {
+            unset($stores[$current->getId()]);
+        }
+        $allowedWebsites = $config->getRedirectWebsiteIds($current);
         foreach ($stores as $store) {
             /* @var $store Mage_Core_Model_Store */
-            if ($store->getId() == $current->getId()) {
+            if (!in_array($store->getWebsiteId(), $allowedWebsites)) {
                 continue;
             } else if ($helper->getDefaultCountry($store) == $countryCode &&
                                 $config->isCountryAllowed($countryCode, $store)) {
