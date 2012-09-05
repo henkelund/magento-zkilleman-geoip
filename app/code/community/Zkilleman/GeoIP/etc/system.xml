@@ -65,7 +65,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment><![CDATA[Redirect to store view with matching default country]]></comment>
+                            <comment><![CDATA[Redirect to store view with matching default country or locale]]></comment>
                         </store_redirect>
                         <redirect_allowed_websites translate="label comment">
                             <label>Allowed Redirect Websites</label>

@@ -51,26 +51,56 @@ class Zkilleman_GeoIP_Model_Observer
             return;
         }
 
-        $helper  = Mage::helper('core');
-        $current = Mage::app()->getStore();
-        if ($helper->getDefaultCountry($current) == $countryCode) {
-            return;
-        }
+        $helper       = Mage::helper('core');
+        $current      = Mage::app()->getStore();
+        $matchRef     = null;
+        $storeMatches = array(
+            'default' => array(),
+            'locale'  => array(),
+            'allowed' => array()
+        );
 
-        $stores = Mage::app()->getStores();
-        if (isset($stores[$current->getId()])) {
-            unset($stores[$current->getId()]);
-        }
-        $allowedWebsites = $config->getRedirectWebsiteIds($current);
-        foreach ($stores as $store) {
+        foreach (Mage::app()->getStores() as $store) {
             /* @var $store Mage_Core_Model_Store */
-            if (!in_array($store->getWebsiteId(), $allowedWebsites)) {
+            $localeMatch = array();
+            if ($helper->getDefaultCountry($store) == $countryCode) {
+                $matchRef = &$storeMatches['default'];
+            } else if (preg_match(
+                            '/^[a-z]{2}_([A-Z]{2})$/',
+                            Mage::getStoreConfig('general/locale/code', $store),
+                            $localeMatch)
+                                && $localeMatch[1] == $countryCode) {
+                $matchRef = &$storeMatches['locale'];
+            } else if ($config->isCountryAllowed($countryCode, $store)) {
+                $matchRef = &$storeMatches['allowed'];
+            } else {
                 continue;
-            } else if ($helper->getDefaultCountry($store) == $countryCode &&
-                                $config->isCountryAllowed($countryCode, $store)) {
+            }
+            if ($store->getId() == $current->getId()) {
+                array_unshift($matchRef, $store);
+            } else {
+                array_push($matchRef, $store);
+            }
+        }
 
+        foreach ($storeMatches as $type => $matches) {
+            if (count($matches) > 0) {
+                $store = $matches[0];
+                if ($store->getId() == $current->getId()) {
+                    return;
+                }
                 $action->getResponse()->setRedirect($store->getCurrentUrl(false));
                 $action->getRequest()->setDispatched();
+                /*Mage::log(
+                        sprintf(
+                                'Redirected from "%s" to "%s" because %s is %s',
+                                $current->getName(),
+                                $store->getName(),
+                                $countryCode,
+                                $type
+                        ),
+                        Zend_Log::DEBUG,
+                        'Zkilleman_GeoIP.log');*/
                 return;
             }
         }
