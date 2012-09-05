@@ -63,13 +63,20 @@ abstract class Zkilleman_GeoIP_Model_Resource_Indexer_Country_Abstract
     {
         $this->_getIndexAdapter()->truncateTable($this->getIdxTable());
         if (!$this->_prepareDataSource()) {
-            throw new Exception('Country index preparation failed');
+            Mage::throwException('Country index preparation failed');
         }
+        $i = 0;
         while (false !== ($data = $this->_nextDataRow())) {
             $this->_getIndexAdapter()->insert($this->getIdxTable(), $data);
+            ++$i;
         }
-        $this->syncData();
+        if ($i > 0) {
+            $this->syncData();
+        }
         $this->_getIndexAdapter()->truncateTable($this->getIdxTable());
+        if ($i == 0) {
+            Mage::throwException('No IP ranges indexed');
+        }
         return $this;
     }
 }

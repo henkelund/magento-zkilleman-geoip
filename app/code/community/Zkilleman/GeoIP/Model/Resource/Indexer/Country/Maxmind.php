@@ -104,9 +104,10 @@ class Zkilleman_GeoIP_Model_Resource_Indexer_Country_Maxmind
     protected function _nextDataRow()
     {
         if (is_resource($this->_csv)) {
-            $row = fgetcsv($this->_csv);
-            if ($row && count($row) == count($this->_columns)) {
-                return array_combine($this->_columns, $row);
+            while ($row = fgetcsv($this->_csv)) {
+                if (count($row) == count($this->_columns)) {
+                    return array_combine($this->_columns, $row);
+                }
             }
             $this->_cleanup();
         }
