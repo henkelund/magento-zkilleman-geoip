@@ -31,7 +31,7 @@
 <config>
     <modules>
         <Zkilleman_GeoIP>
-            <version>0.2.4.0</version>
+            <version>0.2.5.0</version>
         </Zkilleman_GeoIP>
     </modules>
     <global>
@@ -139,8 +139,28 @@
             </general>
             <import>
                 <country_source>maxmind</country_source>
+                <cron_country_enabled>0</cron_country_enabled>
+                <cron_country_time></cron_country_time>
+                <cron_country_frequency>W</cron_country_frequency>
                 <country_ipv6_source>maxmind</country_ipv6_source>
+                <cron_country_ipv6_enabled>0</cron_country_ipv6_enabled>
+                <cron_country_ipv6_time></cron_country_ipv6_time>
+                <cron_country_ipv6_frequency>W</cron_country_ipv6_frequency>
             </import>
         </geoip>
     </default>
+    <crontab>
+        <jobs>
+            <geoip_country>
+                <run>
+                    <model>geoip/indexer_country::reindexAll</model>
+                </run>
+            </geoip_country>
+            <geoip_country_ipv6>
+                <run>
+                    <model>geoip/indexer_ipv6_country::reindexAll</model>
+                </run>
+            </geoip_country_ipv6>
+        </jobs>
+    </crontab>
 </config>

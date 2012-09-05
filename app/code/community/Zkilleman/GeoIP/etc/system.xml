@@ -88,21 +88,79 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
+                        <cron_country_enabled translate="label comment">
+                            <label>Enable Auto Import</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cron_country_enabled>
+                        <cron_country_time translate="label comment">
+                            <label>Auto Import Time</label>
+                            <frontend_type>time</frontend_type>
+                            <!--depends><cron_country_enabled>1</cron_country_enabled></depends-->
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cron_country_time>
+                        <cron_country_frequency translate="label comment">
+                            <label>Auto Import Frequency</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_cron_frequency</source_model>
+                            <backend_model>geoip/system_config_backend_country_cron</backend_model>
+                            <!--depends><cron_country_enabled>1</cron_country_enabled></depends-->
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cron_country_frequency>
                         <country_source translate="label comment">
                             <label>Country Ranges Data Source</label>
                             <frontend_type>select</frontend_type>
                             <source_model>geoip/config_source_country_sources</source_model>
-                            <sort_order>10</sort_order>
+                            <sort_order>40</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                             <comment><![CDATA[Service used to popuplate country ip ranges database]]></comment>
                         </country_source>
+                        <cron_country_ipv6_enabled translate="label comment">
+                            <label>Enable IPv6 Auto Import</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cron_country_ipv6_enabled>
+                        <cron_country_ipv6_time translate="label comment">
+                            <label>IPv6 Auto Import Time</label>
+                            <frontend_type>time</frontend_type>
+                            <!--depends><cron_country_ipv6_enabled>1</cron_country_ipv6_enabled></depends-->
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cron_country_ipv6_time>
+                        <cron_country_ipv6_frequency translate="label comment">
+                            <label>IPv6 Auto Import Frequency</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_cron_frequency</source_model>
+                            <backend_model>geoip/system_config_backend_country_ipv6_cron</backend_model>
+                            <!--depends><cron_country_ipv6_enabled>1</cron_country_ipv6_enabled></depends-->
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cron_country_ipv6_frequency>
                         <country_ipv6_source translate="label comment">
                             <label>Country IPv6 Ranges Data Source</label>
                             <frontend_type>select</frontend_type>
                             <source_model>geoip/config_source_country_ipv6_sources</source_model>
-                            <sort_order>20</sort_order>
+                            <sort_order>80</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
