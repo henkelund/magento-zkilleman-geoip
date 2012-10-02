@@ -112,6 +112,10 @@ class Zkilleman_GeoIP_Model_Observer
      */
     public function predispatch($observer)
     {
+        if (!Mage::isInstalled()) {
+            // Session constructor crashes if Magento's not installed
+            return;
+        }
         $session = Mage::getSingleton('customer/session');
         /* @var $session Mage_Customer_Model_Session */
 
