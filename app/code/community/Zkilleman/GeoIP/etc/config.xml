@@ -31,7 +31,7 @@
 <config>
     <modules>
         <Zkilleman_GeoIP>
-            <version>0.2.9.0</version>
+            <version>0.3.0.0</version>
         </Zkilleman_GeoIP>
     </modules>
     <global>
@@ -140,6 +140,9 @@
                 <enabled>1</enabled>
                 <allowed_websites>1</allowed_websites>
                 <logging_enabled>0</logging_enabled>
+                <allowed_routes>1</allowed_routes>
+                <routes_whitelist>catalog,catalogsearch,cms,contacts,customer,poll,review,tag</routes_whitelist>
+                <routes_blacklist>api,checkout,googlecheckout,install,moneybookers,paypal,paypaluk</routes_blacklist>
             </redirect>
             <import>
                 <country_source>maxmind</country_source>

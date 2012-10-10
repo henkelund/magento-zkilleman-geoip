@@ -47,7 +47,8 @@ class Zkilleman_GeoIP_Model_Observer
     protected function _tryRedirect($action, $countryCode)
     {
         $config = $this->_getConfig();
-        if (!$config->isStoreRedirectEnabled()) {
+        if (!$config->isStoreRedirectEnabled() ||
+                !$config->isStoreRedirectAllowed($action)) {
             return;
         }
 

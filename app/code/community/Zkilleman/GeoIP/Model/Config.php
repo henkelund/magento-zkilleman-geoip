@@ -35,6 +35,9 @@ class Zkilleman_GeoIP_Model_Config
     const XML_PATH_STORE_REDIRECT        = 'geoip/redirect/enabled';
     const XML_PATH_REDIRECT_WEBSITES     = 'geoip/redirect/allowed_websites';
     const XML_PATH_REDIRECT_LOGGING      = 'geoip/redirect/logging_enabled';
+    const XML_PATH_REDIRECT_ROUTES       = 'geoip/redirect/allowed_routes';
+    const XML_PATH_ROUTES_WHITELIST      = 'geoip/redirect/routes_whitelist';
+    const XML_PATH_ROUTES_BLACKLIST      = 'geoip/redirect/routes_blacklist';
     const XML_PATH_COUNTRY_SOURCES       = 'global/geoip/country/sources';
     const XML_PATH_COUNTRY_SOURCE        = 'geoip/import/country_source';
     const XML_PATH_COUNTRY_IPV6_SOURCES  = 'global/geoip/country_ipv6/sources';
@@ -201,6 +204,35 @@ class Zkilleman_GeoIP_Model_Config
     public function isRedirectLoggingEnabled()
     {
         return Mage::getStoreConfigFlag(self::XML_PATH_REDIRECT_LOGGING);
+    }
+
+    /**
+     *
+     * @param  Mage_Core_Controller_Varien_Action $action
+     * @return boolean
+     */
+    public function isStoreRedirectAllowed($action)
+    {
+        $result;
+        switch (Mage::getStoreConfig(self::XML_PATH_REDIRECT_ROUTES)) {
+            case Zkilleman_GeoIP_Model_Config_Source_Redirect_Routerestrictions::WHITELIST:
+                $routeName = $action->getRequest()->getRequestedRouteName();
+                $whitelist = $this->_explode(Mage::getStoreConfig(
+                                                self::XML_PATH_ROUTES_WHITELIST));
+                $result    = in_array($routeName, $whitelist);
+                break;
+            case Zkilleman_GeoIP_Model_Config_Source_Redirect_Routerestrictions::BLACKLIST:
+                $routeName = $action->getRequest()->getRequestedRouteName();
+                $blacklist = $this->_explode(Mage::getStoreConfig(
+                                                self::XML_PATH_ROUTES_BLACKLIST));
+                $result    = !in_array($routeName, $blacklist);
+                break;
+            default:
+            //case Zkilleman_GeoIP_Model_Config_Source_Redirect_Routerestrictions::ALLOW_ALL:
+                $result = true;
+                break;
+        }
+        return $result;
     }
 
     /**
