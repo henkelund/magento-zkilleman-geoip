@@ -31,7 +31,7 @@
 <config>
     <modules>
         <Zkilleman_GeoIP>
-            <version>0.2.8.0</version>
+            <version>0.2.9.0</version>
         </Zkilleman_GeoIP>
     </modules>
     <global>
@@ -133,6 +133,7 @@
     <default>
         <geoip>
             <general>
+                <enabled>1</enabled>
                 <set_addresses_country>1</set_addresses_country>
             </general>
             <redirect>

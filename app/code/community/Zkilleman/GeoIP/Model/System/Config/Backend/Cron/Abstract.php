@@ -39,6 +39,15 @@ abstract class Zkilleman_GeoIP_Model_System_Config_Backend_Cron_Abstract
 
     /**
      *
+     * @return Zkilleman_GeoIP_Model_Config
+     */
+    protected function _getConfig()
+    {
+        return Mage::getSingleton('geoip/config');
+    }
+
+    /**
+     *
      */
     protected abstract function _preparePaths();
 
@@ -64,7 +73,7 @@ abstract class Zkilleman_GeoIP_Model_System_Config_Backend_Cron_Abstract
      */
     protected function _afterSave()
     {
-        if (!$this->preparePaths()) {
+        if (!$this->_getConfig()->isEnabled() || !$this->preparePaths()) {
             return;
         }
         $enabled   = $this->getData($this->_enabledValuePath);
