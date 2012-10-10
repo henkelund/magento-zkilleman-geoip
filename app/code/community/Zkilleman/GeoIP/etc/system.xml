@@ -57,33 +57,43 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Use IP lookup to set initial quote addresses country]]></comment>
                         </set_addresses_country>
-                        <store_redirect translate="label comment">
+                    </fields>
+                </general>
+                <redirect translate="label">
+                    <label>Redirect Options</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enabled translate="label comment">
                             <label>Enable Store Redirect</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>20</sort_order>
+                            <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Redirect to store view with matching default country or locale]]></comment>
-                        </store_redirect>
-                        <redirect_allowed_websites translate="label comment">
+                        </enabled>
+                        <allowed_websites translate="label comment">
                             <label>Allowed Redirect Websites</label>
                             <frontend_type>multiselect</frontend_type>
                             <frontend_model>geoip/adminhtml_form_field_websites</frontend_model>
-                            <depends><store_redirect>1</store_redirect></depends>
-                            <sort_order>30</sort_order>
+                            <depends><enabled>1</enabled></depends>
+                            <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Stay within these websites when redirecting]]></comment>
-                        </redirect_allowed_websites>
+                        </allowed_websites>
                     </fields>
-                </general>
+                </redirect>
                 <import translate="label">
                     <label>Import Options</label>
                     <frontend_type>text</frontend_type>
-                    <sort_order>20</sort_order>
+                    <sort_order>30</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>

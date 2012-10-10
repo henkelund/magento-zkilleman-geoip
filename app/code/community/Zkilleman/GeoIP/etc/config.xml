@@ -31,7 +31,7 @@
 <config>
     <modules>
         <Zkilleman_GeoIP>
-            <version>0.2.5.3</version>
+            <version>0.2.6.0</version>
         </Zkilleman_GeoIP>
     </modules>
     <global>
@@ -134,9 +134,11 @@
         <geoip>
             <general>
                 <set_addresses_country>1</set_addresses_country>
-                <store_redirect>1</store_redirect>
-                <redirect_allowed_websites>1</redirect_allowed_websites>
             </general>
+            <redirect>
+                <enabled>1</enabled>
+                <allowed_websites>1</allowed_websites>
+            </redirect>
             <import>
                 <country_source>maxmind</country_source>
                 <cron_country_enabled>0</cron_country_enabled>
