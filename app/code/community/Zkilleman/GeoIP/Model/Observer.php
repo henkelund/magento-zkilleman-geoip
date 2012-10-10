@@ -56,8 +56,8 @@ class Zkilleman_GeoIP_Model_Observer
         $matchRef     = null;
         $storeMatches = array(
             'default' => array(),
-            'locale'  => array(),
-            'allowed' => array()
+            'allowed' => array(),
+            'locale'  => array()
         );
         $allowedWebsites = $config->getRedirectWebsiteIds($current);
 
@@ -69,14 +69,14 @@ class Zkilleman_GeoIP_Model_Observer
             $localeMatch = array();
             if ($helper->getDefaultCountry($store) == $countryCode) {
                 $matchRef = &$storeMatches['default'];
+            } else if ($config->isCountryAllowed($countryCode, $store)) {
+                $matchRef = &$storeMatches['allowed'];
             } else if (preg_match(
                             '/^[a-z]{2}_([A-Z]{2})$/',
                             Mage::getStoreConfig('general/locale/code', $store),
                             $localeMatch)
                                 && $localeMatch[1] == $countryCode) {
                 $matchRef = &$storeMatches['locale'];
-            } else if ($config->isCountryAllowed($countryCode, $store)) {
-                $matchRef = &$storeMatches['allowed'];
             } else {
                 continue;
             }
