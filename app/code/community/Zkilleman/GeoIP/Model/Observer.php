@@ -59,9 +59,13 @@ class Zkilleman_GeoIP_Model_Observer
             'locale'  => array(),
             'allowed' => array()
         );
+        $allowedWebsites = $config->getRedirectWebsiteIds($current);
 
         foreach (Mage::app()->getStores() as $store) {
             /* @var $store Mage_Core_Model_Store */
+            if (!in_array($store->getWebsiteId(), $allowedWebsites)) {
+                continue;
+            }
             $localeMatch = array();
             if ($helper->getDefaultCountry($store) == $countryCode) {
                 $matchRef = &$storeMatches['default'];
