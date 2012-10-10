@@ -31,7 +31,7 @@
 <config>
     <modules>
         <Zkilleman_GeoIP>
-            <version>0.2.7.0</version>
+            <version>0.2.8.0</version>
         </Zkilleman_GeoIP>
     </modules>
     <global>
@@ -138,6 +138,7 @@
             <redirect>
                 <enabled>1</enabled>
                 <allowed_websites>1</allowed_websites>
+                <logging_enabled>0</logging_enabled>
             </redirect>
             <import>
                 <country_source>maxmind</country_source>

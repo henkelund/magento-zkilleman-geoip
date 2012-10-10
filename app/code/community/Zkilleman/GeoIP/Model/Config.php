@@ -33,6 +33,7 @@ class Zkilleman_GeoIP_Model_Config
     const XML_PATH_SET_ADDRESSES_COUNTRY = 'geoip/general/set_addresses_country';
     const XML_PATH_STORE_REDIRECT        = 'geoip/redirect/enabled';
     const XML_PATH_REDIRECT_WEBSITES     = 'geoip/redirect/allowed_websites';
+    const XML_PATH_REDIRECT_LOGGING      = 'geoip/redirect/logging_enabled';
     const XML_PATH_COUNTRY_SOURCES       = 'global/geoip/country/sources';
     const XML_PATH_COUNTRY_SOURCE        = 'geoip/import/country_source';
     const XML_PATH_COUNTRY_IPV6_SOURCES  = 'global/geoip/country_ipv6/sources';
@@ -178,6 +179,15 @@ class Zkilleman_GeoIP_Model_Config
         $allowed = $this->_explode(
                         Mage::getStoreConfig('general/country/allow', $store));
         return in_array(strtoupper($countryCode), $allowed);
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isRedirectLoggingEnabled()
+    {
+        return Mage::getStoreConfigFlag(self::XML_PATH_REDIRECT_LOGGING);
     }
 
     /**

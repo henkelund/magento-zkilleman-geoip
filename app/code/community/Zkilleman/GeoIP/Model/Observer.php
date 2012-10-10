@@ -95,16 +95,18 @@ class Zkilleman_GeoIP_Model_Observer
                 }
                 $action->getResponse()->setRedirect($store->getCurrentUrl(false));
                 $action->getRequest()->setDispatched();
-                /*Mage::log(
-                        sprintf(
-                                'Redirected from "%s" to "%s" because %s is %s',
-                                $current->getName(),
-                                $store->getName(),
-                                $countryCode,
-                                $type
-                        ),
-                        Zend_Log::DEBUG,
-                        'Zkilleman_GeoIP.log');*/
+                if ($config->isRedirectLoggingEnabled()) {
+                    Mage::log(
+                            sprintf(
+                                    'Redirected from "%s" to "%s" because %s is %s',
+                                    $current->getName(),
+                                    $store->getName(),
+                                    $countryCode,
+                                    $type
+                            ),
+                            Zend_Log::DEBUG,
+                            'Zkilleman_GeoIP.log');
+                }
                 return;
             }
         }
